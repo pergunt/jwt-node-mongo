@@ -12,11 +12,12 @@ class TokenService {
     generateTokens(payload) {
         return {
             accessToken: jwt.sign(payload, JWT_ACCESS_SECRET, {
-                // expiresIn: 30 * 24 * 60 * 60
-                expiresIn: '30s'
+                expiresIn: 30 * 24 * 60 * 60
+                // expiresIn: '10s'
             }),
             refreshToken: jwt.sign(payload, JWT_REFRESH_SECRET, {
                 expiresIn: 30 * 24 * 60 * 60
+                // expiresIn: '10s'
             })
         }
     }

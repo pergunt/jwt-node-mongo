@@ -87,8 +87,10 @@ class UsersService {
         return this.saveTokens(user)
     }
 
-    findById(id) {
-        return userModel.findById(id)
+    async findById(id) {
+        const result = await userModel.findById(id)
+
+        return new UserDTO(result)
     }
     getAll() {
         return userModel.find()

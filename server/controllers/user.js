@@ -14,8 +14,17 @@ class User {
             maxAge: 60 * 60 * 1000
         })
     }
-    register = async (req, res, next) => {
+
+    async wrapper(fn, next) {
         try {
+            return await fn()
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    register = (req, res, next) => {
+        return this.wrapper(async () => {
             const errors = validationResult(req)
 
             if (!errors.isEmpty()) {
@@ -25,31 +34,27 @@ class User {
             }
 
             const {email, password} = req.body
-            const user = await userService.register(email, password)
+            const {user, ...tokens} = await userService.register(email, password)
 
-            this.setCookies(res, user)
+            this.setCookies(res, tokens)
 
             return res.json(user)
-        } catch (e) {
-            next(e)
-        }
+        }, next)
     }
 
-    login = async (req, res, next) => {
-        try {
+    login = (req, res, next) => {
+        return this.wrapper(async () => {
             const { email, password } = req.body
-            const user = await userService.login(email, password)
+            const {user, ...tokens} = await userService.login(email, password)
 
-            this.setCookies(res, user)
+            this.setCookies(res, tokens)
 
             return res.json(user)
-        } catch (e) {
-            next(e)
-        }
+        }, next)
     }
 
-    async logout(req, res, next) {
-        try {
+    logout = (req, res, next) => {
+        return this.wrapper(async () => {
             const {refreshToken} = req.cookies
 
             const token = await userService.logout(refreshToken)
@@ -58,42 +63,42 @@ class User {
             res.clearCookie('accessToken')
 
             return res.json(token)
-        } catch (e) {
-            next(e)
-        }
+        }, next)
     }
-    async activate(req, res, next) {
-        try {
+    activate(req, res, next) {
+        return this.wrapper(async () => {
             const activationLink = req.params.link
 
             await userService.activate(activationLink)
 
             return res.redirect(process.env.FRONT_END_URL)
-        } catch (e) {
-            next(e)
-        }
+        }, next)
     }
-    refresh = async (req, res, next) => {
-        try {
+    refresh = (req, res, next) => {
+        return this.wrapper(async () => {
             const {refreshToken} = req.cookies
 
-            const user = await userService.refresh(refreshToken)
+            const {user, ...tokens} = await userService.refresh(refreshToken)
 
-            this.setCookies(res, user)
+            this.setCookies(res, tokens)
 
             return res.json(user)
-        } catch (e) {
-            next(e)
-        }
+        }, next)
     }
-    async getUsers(req, res, next) {
-        try {
+
+    getById = (req, res, next) => {
+        return this.wrapper(async() => {
+            const user = await userService.findById(req.params.id)
+
+            return res.json(user)
+        }, next)
+    }
+    getUsers = (req, res, next) => {
+        return this.wrapper(async() => {
             const users = await userService.getAll()
 
             return res.json(users)
-        } catch (e) {
-            next(e)
-        }
+        }, next)
     }
 }
 

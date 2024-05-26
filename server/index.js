@@ -8,11 +8,14 @@ import router from './router'
 import {errorMiddleware} from './middlewares'
 
 const app = express();
-const {PORT, DATABASE_URL} = process.env || 5123
+const {PORT, DATABASE_URL, FRONT_END_URL} = process.env || 5123
 
 app.use(cookieParser())
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    credentials: true,
+    origin: FRONT_END_URL
+}))
 app.use('/api', router)
 
 app.use(errorMiddleware)

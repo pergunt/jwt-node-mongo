@@ -1,24 +1,22 @@
 import ApiError from '../exceptions/api-error'
-import {tokenService, userService} from '../service'
+import {tokenService} from '../service'
 
 export default async (req, res, next) => {
     try {
-        const {accessToken} = req.cookies
+        const {accessToken, refreshToken} = req.cookies
 
         if (!accessToken) {
-            // got ot catch block
+            // got to the catch block
             throw new Error()
         }
 
-        const valid = tokenService.validateAccessToken(accessToken)
-        const token = await tokenService.findBy({accessToken})
+        const user = tokenService.validateAccessToken(accessToken)
+        const token = await tokenService.findByRefreshToken(refreshToken)
 
-        if (!valid || !token) {
+        if (!user || !token) {
             // got ot catch block
             throw new Error()
         }
-
-        const user = await userService.findById(token.userId)
 
         req.user = user
 

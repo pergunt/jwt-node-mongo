@@ -5,6 +5,7 @@ import {authMiddleware} from '../middlewares'
 
 const router = new Router()
 
+
 router.post(
     '/register',
     body('email').isEmail(),

@@ -1,3 +1,3 @@
-export {default as mailService} from './mail'
-export {default as tokenService} from './token'
-export {default as userService} from './user'
+export * as mailService from './mail'
+export * as tokenService from './token'
+export * as userService from './user'

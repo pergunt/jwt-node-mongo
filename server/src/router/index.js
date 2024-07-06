@@ -27,4 +27,4 @@ router.get(
     userController.getUsers
 )
 
-module.exports = router
+export default router

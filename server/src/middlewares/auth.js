@@ -6,24 +6,22 @@ export default async (req, res, next) => {
         const {accessToken, refreshToken} = req.cookies
 
         if (!accessToken) {
-            // got to the catch block
-            throw new Error()
+            next(ApiError.UnathError())
+            return
         }
 
         const user = tokenService.validateAccessToken(accessToken)
         const token = await tokenService.findByRefreshToken(refreshToken)
 
-        if (!user || !token) {
-            // got ot catch block
-            throw new Error()
+        if (!token) {
+            next(ApiError.UnathError())
+            return
         }
 
         req.user = user
 
         next()
     } catch {
-        next(
-            ApiError.UnathError()
-        )
+        next(ApiError.UnathError())
     }
 }

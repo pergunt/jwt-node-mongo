@@ -5,7 +5,7 @@ import {observer} from 'mobx-react-lite'
 const LoginForm: FC = () => {
   const {store} = useContext(Context)
   const [state, setState] = useState({
-    email: 'waralom472@qiradio.com',
+    email: '',
     password: ''
   })
 

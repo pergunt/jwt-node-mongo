@@ -45,6 +45,7 @@ export const login = wrapper(async (req, res) => {
 
     setCookies(res, tokens)
 
+
     return res.json(user)
 })
 

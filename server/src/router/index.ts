@@ -1,10 +1,9 @@
 import {Router} from 'express'
-import {userController} from '../controllers'
+import {authMiddleware} from 'middlewares'
+import {userController} from 'controllers'
 import {body} from 'express-validator'
-import {authMiddleware} from '../middlewares'
 
-const router = new Router()
-
+const router = Router()
 
 router.post(
     '/register',

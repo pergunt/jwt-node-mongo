@@ -10,7 +10,13 @@ import {checkEnvVars} from './utils'
 
 const app = express();
 
-const {PORT, DATABASE_URL, CORS_URLS} = checkEnvVars()
+const envVars = checkEnvVars()
+
+if (!envVars) {
+    process.exit(1);
+}
+
+const {PORT, DATABASE_URL, CORS_URLS} = envVars
 
 app.use(cookieParser())
 app.use(express.json())

@@ -1,6 +1,6 @@
-import {userService} from '../service'
+import {userService} from 'service'
 import {validationResult} from 'express-validator'
-import ApiError from '../exceptions/api-error'
+import ApiError from 'exceptions/api-error'
 
 const setCookies = (res, {refreshToken, accessToken}) => {
     res.cookie('refreshToken', refreshToken, {

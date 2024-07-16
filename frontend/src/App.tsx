@@ -1,7 +1,10 @@
 import {useEffect, useContext} from 'react';
-import {LoginForm, Users} from 'components'
+import {LoginForm, Users, UserInfo} from 'components'
 import {Context} from 'configs'
 import {observer} from 'mobx-react-lite'
+import { Button } from 'primereact/button';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import styles from './App.module.css'
 
 function App() {
   const {store} = useContext(Context)
@@ -14,32 +17,32 @@ function App() {
     store.authenticate()
   }, [])
 
-  if (store.loading) {
-    return <div>Loading...</div>
-  }
+  let component = null
 
-  if (!store.user) {
-    return <LoginForm />
+  if (store.loading) {
+    component = <ProgressSpinner />
+  } else if (!store.user) {
+    component = <LoginForm />
+  }  else {
+    component = (
+      <div>
+        <UserInfo user={store.user} />
+        <Users />
+        <Button
+          label="Log out"
+          onClick={() => {
+            store.logout()
+          }}
+        />
+      </div>
+    )
   }
 
   return (
-    <div className="App">
-      <h2>
-        {store.user.email}
-      </h2>
-      <h2>
-        {store.user.activated ? 'Active' : 'Not activated'}
-      </h2>
-      <Users />
-      <button
-        onClick={() => {
-          store.logout()
-        }}
-      >
-        Log out
-      </button>
+    <div className={styles.app}>
+      {component}
     </div>
-  );
+  )
 }
 
 export default observer(App)

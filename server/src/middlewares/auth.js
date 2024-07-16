@@ -1,5 +1,5 @@
 import ApiError from '../exceptions/api-error'
-import {tokenService} from '../service'
+import {tokenService} from 'service'
 
 export default async (req, res, next) => {
     try {
